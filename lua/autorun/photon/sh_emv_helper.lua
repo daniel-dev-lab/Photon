@@ -529,6 +529,21 @@ function EMVU.Helper:GetProps( name, ent )
 						propData.PhotonRotationEnabled = true
 						propData.PhotonBoneAnimationData = autoData.BoneOperations
 					end
+
+					local positionVersion = 2
+					if not autoData.NotLegacy then
+						positionVersion = 1
+					end
+					if autoData.PositionVersion then
+						positionVersion = autoData.PositionVersion
+					end
+					propData.PositionVersion = positionVersion
+
+					if positionVersion >= 3 then
+						propData.Pos = Vector(propData.Pos.y, -1 * propData.Pos.x, propData.Pos. z)
+						-- propData.Ang = Angle(propData.Ang.r, propData.Ang.y, propData.Ang.p)
+					end
+
 					results[ #results + 1 ] = propData
 				end
 			end
@@ -564,6 +579,21 @@ function EMVU.Helper:GetProps( name, ent )
 							propData.PhotonRotationEnabled = true
 							propData.PhotonBoneAnimationData = autoData.BoneOperations
 						end
+
+						local positionVersion = 2
+						if not autoData.NotLegacy then
+							positionVersion = 1
+						end
+						if autoData.PositionVersion then
+							positionVersion = autoData.PositionVersion
+						end
+						propData.PositionVersion = positionVersion
+
+						if positionVersion >= 3 then
+							propData.Pos = Vector(propData.Pos.y, -1 * propData.Pos.x, propData.Pos. z)
+							-- propData.Ang = Angle(propData.Ang.p * -1, propData.y, propData.r * -1)
+						end
+
 						results[ #results + 1 ] = propData
 					end
 				end

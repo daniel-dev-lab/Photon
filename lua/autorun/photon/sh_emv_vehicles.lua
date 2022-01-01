@@ -812,6 +812,13 @@ function EMVU:CalculateAuto( name, data, autoInsert )
 			offset = #EMVU.Positions[ name ]
 		end
 
+		local positionVersion = 2
+		if not component.NotLegacy then
+			positionVersion = 1
+		end
+		if component.PositionVersion then
+			positionVersion = component.PositionVersion
+		end
 
 		for id=1,#component.Positions do
 			local posData = component.Positions[ id ]
@@ -822,12 +829,12 @@ function EMVU:CalculateAuto( name, data, autoInsert )
 				newPos:Mul( autoScale )
 				newPos:Add( autoPos )
 				local newAng = Angle()
-				if not component.NotLegacy then
+				if positionVersion == 1 then
 					newAng.y = newAng.y + 90
 					newAng:Set( posData[2] )
 					newAng:RotateAroundAxis( autoAng:Right(), -1*autoAng.p )
 					newAng:RotateAroundAxis( autoAng:Up(), -1*autoAng.r )
-				else
+				elseif positionVersion == 2 then
 					newAng:Set( posData[2] )
 					if component.ForwardTranslation then
 						newAng.p = newAng.p + (autoAng.r *-1)
@@ -838,6 +845,47 @@ function EMVU:CalculateAuto( name, data, autoInsert )
 						newAng.y = newAng.y + autoAng.y
 						newAng.r = newAng.r + autoAng.r
 					end
+				elseif positionVersion == 3 then
+					local offsetPos, offsetAng = unpack(posData)
+					local centerPosition = Matrix()
+					centerPosition:Identity()
+
+					local autoPosition = Matrix(centerPosition)
+					autoPosition:Translate(autoPos)
+					local autoAngle = Angle(autoAng.r, autoAng.y, autoAng.p * -1)
+					-- autoAngle:RotateAroundAxis(Vector(0, 1, 0):GetNormalized(), 90)
+					autoPosition:Rotate(autoAngle)
+					-- autoPosition:Rotate(Angle(autoAng.r, autoAng.y, autoAng.p * -1))
+					-- autoPosition:Rotate(autoAng)
+
+					local spritePosition = Matrix(autoPosition)
+					spritePosition:Translate(offsetPos)
+					newPos = spritePosition:GetTranslation()
+
+					spritePosition:Rotate(offsetAng)
+					newAng = spritePosition:GetAngles()
+
+					-- local ang = Angle(autoAng.r, autoAng.y, autoAng.p * -1)
+					-- local pos = Vector(autoPos.y, autoPos.x, autoPos.z)
+					-- local oAng = Angle(0, 0, 0)
+					-- ang:RotateAroundAxis(ang:Forward(), -90)
+					--  = Vector(offsetPos)
+					-- offsetPos:Rotate(ang)
+					-- newPos = autoPos + offsetPos
+					-- newPos, newAng = LocalToWorld(offsetPos, offsetAng, autoPos, ang)
+
+					-- newAng = ang + oAng
+
+					-- ang:RotateAroundAxis(ang:Right(), -90)
+					-- ang:RotateAroundAxis(ang:Right(), 90)
+
+					-- local offsetPos, offsetAng = unpack(posData)
+					-- newPos, newAng = LocalToWorld(offsetPos, offsetAng, autoPos, ang)
+					-- newAng = Angle(newAng.p, newAng.y, -1 * newAng.r)
+					-- newPos = autoPos + offsetPos
+					-- newAng = autoAng
+					-- _, newAng = WorldToLocal(offsetPos, offsetAng, Vector(0, 0, 0), autoAng)
+
 				end
 				EMVU.Positions[ name ][ offset + id ] = {
 					newPos, newAng, tostring( posData[3] .. "_" .. i ), posData[4] or false

@@ -661,6 +661,16 @@ function EMVU:MakeEMV( emv, name )
 				prop:SetParent(emv, emv:LookupAttachment(p.AttachmentMerge))
 			end
 
+			if (p.PositionVersion or 2) >= 3 and self:GetClass() == "prop_vehicle_jeep" then
+				-- We want Angle(0, 0, 0) to face front-wards.
+				-- Right is Backwards, Forward is Right.
+				local pos, ang = self:GetPos(), self:GetAngles()
+				ang:RotateAroundAxis(ang:Up(), -270)
+				local setPos, setAng = LocalToWorld(p.Pos, p.Ang, pos, ang)
+				prop:SetAngles(setAng)
+				prop:SetPos(setPos)
+			end
+
 			table.insert(photonLightModels, prop)
 			table.insert( emv.EMVProps, prop )
 
@@ -744,6 +754,15 @@ function EMVU:MakeEMV( emv, name )
 						prop:SetModelScale( emvProps[index].Scale, 0 )
 					end
 				end
+
+				if (emvProps[index].PositionVersion or 2) >= 3 and self:GetClass() == "prop_vehicle_jeep" then
+					local pos, ang = self:GetPos(), self:GetAngles()
+					ang:RotateAroundAxis(ang:Up(), -270)
+					local setPos, setAng = LocalToWorld(emvProps[index].Pos, emvProps[index].Ang, pos, ang)
+					prop:SetAngles(setAng)
+					prop:SetPos(setPos)
+				end
+
 				if prop.AirEL then self.AirELEntity = prop end
 				if not IsValid( self.AirELEntity ) then self.AirELEntity = nil end
 			end
@@ -781,6 +800,15 @@ function EMVU:MakeEMV( emv, name )
 			elseif isnumber( emvProps[index].Scale ) then
 				prop:SetModelScale( emvProps[index].Scale, 0 )
 			end
+
+			if (emvProps[index].PositionVersion or 2) >= 3 and self:GetClass() == "prop_vehicle_jeep" then
+				local pos, ang = self:GetPos(), self:GetAngles()
+					ang:RotateAroundAxis(ang:Up(), -270)
+					local setPos, setAng = LocalToWorld(emvProps[index].Pos, emvProps[index].Ang, pos, ang)
+					prop:SetAngles(setAng)
+					prop:SetPos(setPos)
+			end
+
 			if prop.AirEL then self.AirELEntity = prop end
 			if not IsValid( self.AirELEntity ) then self.AirELEntity = nil end
 		end

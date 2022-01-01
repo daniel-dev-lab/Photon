@@ -16,6 +16,7 @@ COMPONENT.DefaultColors = {
 	[1] = "RED",
 	[2] = "BLUE"
 }
+COMPONENT.PositionVersion = 3
 
 COMPONENT.Meta = {
 	rx2700_front = {
