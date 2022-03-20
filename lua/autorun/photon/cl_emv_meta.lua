@@ -662,6 +662,16 @@ function EMVU:MakeEMV( emv, name )
 			end
 
 			if p.AttachmentMerge then
+				PhotonDebug("Attachment Points (ID / Name / Position / Angle)")
+				for _, dt in ipairs(emv:GetAttachments()) do
+					local id = dt.id
+					local name = dt.name
+					local pang = emv:GetAttachment(id)
+					local pos = pang.Pos
+					local ang = pang.Ang
+					PhotonDebug(id, name, pos, "/", ang)
+				end
+
 				prop:SetParent(nil)
 
 				local attach = emv:LookupAttachment(p.AttachmentMerge)
