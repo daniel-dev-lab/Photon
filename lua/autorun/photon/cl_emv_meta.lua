@@ -648,17 +648,37 @@ function EMVU:MakeEMV( emv, name )
 			end
 
 			if p.OffsetBone then
-				if p.OffsetBoneAng then
-					emv:ManipulateBoneAngles(emv:LookupBone(p.OffsetBone), p.OffsetBoneAng)
-				end
-				if p.OffsetBonePos then
-					emv:ManipulateBonePosition(emv:LookupBone(p.OffsetBone), p.OffsetBonePos)
+				local bone = emv:LookupBone(p.OffsetBone)
+				if bone == nil then
+					PhotonError("Attempted to setup bone: ", p.OffsetBone, " which could not be found.")
+				else
+					if p.OffsetBoneAng then
+						emv:ManipulateBoneAngles(bone, p.OffsetBoneAng)
+					end
+					if p.OffsetBonePos then
+						emv:ManipulateBonePosition(bone, p.OffsetBonePos)
+					end
 				end
 			end
 
 			if p.AttachmentMerge then
 				prop:SetParent(nil)
-				prop:SetParent(emv, emv:LookupAttachment(p.AttachmentMerge))
+
+				local attach = emv:LookupAttachment(p.AttachmentMerge)
+				if attach == 0 or attach == -1 then
+					PhotonError("Attempted to setup attachment: ", p.AttachmentMerge, " which could not be found.")
+				else
+					local ad = emv:GetAttachment(attach)
+
+					if p.MovePropToAttachment then
+						prop:SetPos(emv:LocalToWorld(ad.Pos))
+					end
+					if p.RotatePropToAttachment then
+						prop:SetAngles(emv:LocalToWorldAngles(ad.Ang + p.Ang))
+					end
+
+					prop:SetParent(emv, attach)
+				end
 			end
 
 			table.insert(photonLightModels, prop)
@@ -728,9 +748,25 @@ function EMVU:MakeEMV( emv, name )
 					prop:SetPos( self:LocalToWorld( emvProps[index].Pos ) )
 					prop:SetAngles( self:LocalToWorldAngles( emvProps[index].Ang ) )
 
-					if emvProps[index].AttachmentMerge then
+					local p = emvProps[index]
+					if p.AttachmentMerge then
 						prop:SetParent(nil)
-						prop:SetParent(self, self:LookupAttachment(emvProps[index].AttachmentMerge))
+
+						local attach = emv:LookupAttachment(p.AttachmentMerge)
+						if attach == 0 or attach == -1 then
+							PhotonError("Attempted to setup attachment: ", p.AttachmentMerge, " which could not be found.")
+						else
+							local ad = emv:GetAttachment(attach)
+
+							if p.MovePropToAttachment then
+								prop:SetPos(emv:LocalToWorld(ad.Pos))
+							end
+							if p.RotatePropToAttachment then
+								prop:SetAngles(emv:LocalToWorldAngles(ad.Ang + p.Ang))
+							end
+
+							prop:SetParent(emv, attach)
+						end
 					end
 
 				end
@@ -769,9 +805,25 @@ function EMVU:MakeEMV( emv, name )
 			prop:SetPos( self:LocalToWorld( emvProps[index].Pos ) )
 			prop:SetAngles( self:LocalToWorldAngles( emvProps[index].Ang ) )
 
-			if emvProps[index].AttachmentMerge then
+			local p = emvProps[index]
+			if p.AttachmentMerge then
 				prop:SetParent(nil)
-				prop:SetParent(self, self:LookupAttachment(emvProps[index].AttachmentMerge))
+
+				local attach = emv:LookupAttachment(p.AttachmentMerge)
+				if attach == 0 or attach == -1 then
+					PhotonError("Attempted to setup attachment: ", p.AttachmentMerge, " which could not be found.")
+				else
+					local ad = emv:GetAttachment(attach)
+
+					if p.MovePropToAttachment then
+						prop:SetPos(emv:LocalToWorld(ad.Pos))
+					end
+					if p.RotatePropToAttachment then
+						prop:SetAngles(emv:LocalToWorldAngles(ad.Ang + p.Ang))
+					end
+
+					prop:SetParent(emv, attach)
+				end
 			end
 
 			if isvector( emvProps[index].Scale ) then
