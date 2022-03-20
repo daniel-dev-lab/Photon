@@ -671,7 +671,7 @@ function EMVU:MakeEMV( emv, name )
 					local ad = emv:GetAttachment(attach)
 
 					if p.MovePropToAttachment then
-						prop:SetPos(emv:LocalToWorld(ad.Pos))
+						prop:SetPos(emv:LocalToWorld(ad.Pos + p.Pos))
 					end
 					if p.RotatePropToAttachment then
 						prop:SetAngles(emv:LocalToWorldAngles(ad.Ang + p.Ang))
@@ -759,7 +759,7 @@ function EMVU:MakeEMV( emv, name )
 							local ad = emv:GetAttachment(attach)
 
 							if p.MovePropToAttachment then
-								prop:SetPos(emv:LocalToWorld(ad.Pos))
+								prop:SetPos(emv:LocalToWorld(ad.Pos + p.Pos))
 							end
 							if p.RotatePropToAttachment then
 								prop:SetAngles(emv:LocalToWorldAngles(ad.Ang + p.Ang))
@@ -816,7 +816,7 @@ function EMVU:MakeEMV( emv, name )
 					local ad = emv:GetAttachment(attach)
 
 					if p.MovePropToAttachment then
-						prop:SetPos(emv:LocalToWorld(ad.Pos))
+						prop:SetPos(emv:LocalToWorld(ad.Pos + p.Pos))
 					end
 					if p.RotatePropToAttachment then
 						prop:SetAngles(emv:LocalToWorldAngles(ad.Ang + p.Ang))
