@@ -84,6 +84,7 @@ end
 
 Photon.Messages:BuildLevel("Error")
 Photon.Messages:BuildLevel("Warning")
+Photon.Messages:BuildLevel("Debug")
 
 AddCSLuaFile("cl_photon_eng.lua")
 AddCSLuaFile("cl_photon_meta.lua")
