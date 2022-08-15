@@ -510,10 +510,10 @@ function Photon:RenderQueue( effects )
 	end
 	local start = SysTime()
 
-	local eyePos = EyePos()
-	local eyeAng = EyeAngles()
+	-- local eyePos = EyePos()
+	-- local eyeAng = EyeAngles()
 	local count = #photonRenderTable
-	if isToggled then if not effects then cam3d( eyePos, eyeAng ) else cam2d( eyePos, eyeAng ) end end
+	-- if isToggled then if not effects then cam3d( eyePos, eyeAng ) else cam2d( eyePos, eyeAng ) end end
 	if ( count > 0 ) then
 		local debug_mode = PHOTON_DEBUG
 		local renderFunction
@@ -526,7 +526,7 @@ function Photon:RenderQueue( effects )
 			end
 		end
 	end
-	if isToggled then if not effects then endCam3d() else endCam2d() end end
+	-- if isToggled then if not effects then endCam3d() else endCam2d() end end
 	local ed = SysTime()
 
 	local dur = ed - start
