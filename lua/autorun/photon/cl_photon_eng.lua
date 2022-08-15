@@ -502,7 +502,7 @@ function Photon:RenderQueue( effects )
 	local eyePos = EyePos()
 	local eyeAng = EyeAngles()
 	local count = #photonRenderTable
-	if not effects then cam3d( eyePos, eyeAng ) else cam2d( eyePos, eyeAng ) end
+	-- if not effects then cam3d( eyePos, eyeAng ) else cam2d( eyePos, eyeAng ) end
 	if ( count > 0 ) then
 		local debug_mode = PHOTON_DEBUG
 		local renderFunction
@@ -515,9 +515,15 @@ function Photon:RenderQueue( effects )
 			end
 		end
 	end
-	if not effects then endCam3d() else endCam2d() end
+	-- if not effects then endCam3d() else endCam2d() end
 	-- Photon:ClearLightQueue()
 end
+
+concommand.Add("photon_timing", function()
+	print(string.format("enabled: %s, %s, %s", amt_enabled, tot_enabled, tot_enabled / amt_enabled))
+	print(string.format("disabled: %s, %s, %s", amt_disabled, tot_disabled, tot_disabled / amt_disabled))
+end)
+
 hook.Add( "PreDrawEffects", "Photon.RenderQueue", function()
 	Photon:RenderQueue( false )
 	if draw_effects and draw_effects:GetBool() then
