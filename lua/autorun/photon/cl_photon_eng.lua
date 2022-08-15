@@ -498,11 +498,22 @@ hook.Add( "InitPostEntity", "Photon.DrawEffectsConvar", function()
 	dynlights_enabled = GetConVar( "photon_dynamic_lights" )
 end)
 
+local tot_enabled, tot_disabled, amt_enabled, amt_disabled = 0, 0, 0, 0
+local toggled, toggled_effects = true, true
+
 function Photon:RenderQueue( effects )
+	local isToggled
+	if effects then
+		isToggled = toggled_effects
+	else
+		isToggled = toggled
+	end
+	local start = SysTime()
+
 	local eyePos = EyePos()
 	local eyeAng = EyeAngles()
 	local count = #photonRenderTable
-	-- if not effects then cam3d( eyePos, eyeAng ) else cam2d( eyePos, eyeAng ) end
+	if isToggled then if not effects then cam3d( eyePos, eyeAng ) else cam2d( eyePos, eyeAng ) end end
 	if ( count > 0 ) then
 		local debug_mode = PHOTON_DEBUG
 		local renderFunction
@@ -515,7 +526,22 @@ function Photon:RenderQueue( effects )
 			end
 		end
 	end
-	-- if not effects then endCam3d() else endCam2d() end
+	if isToggled then if not effects then endCam3d() else endCam2d() end end
+	local ed = SysTime()
+
+	local dur = ed - start
+	if isToggled then
+		amt_enabled = amt_enabled + 1
+		tot_enabled = tot_enabled + dur
+	else
+		amt_disabled = amt_disabled + 1
+		tot_disabled = tot_disabled + dur
+	end
+	if effects then
+		toggled_effects = not toggled_effects
+	else
+		toggled = not toggled
+	end
 	-- Photon:ClearLightQueue()
 end
 
