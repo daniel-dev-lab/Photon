@@ -319,7 +319,7 @@ local endCam = cam.End3D2D
 local bloomRef = 0
 local bloomColor = nil
 
-function Photon.QuickDrawNoTable( srcOnly, drawSrc, camPos, camAng, srcSprite, srcT, srcR, srcB, srcL, worldPos, bloomScale, flareScale, widthScale, colSrc, colMed, colAmb, colBlm, colGlw, colRaw, colFlr, lightMod, cheap, viewFlare, multiEmit, SubmatID, SubmatMaterial, SubmatParent, debug_mode )
+function Photon.QuickDrawNoTable( debug_mode, srcOnly, drawSrc, camPos, camAng, srcSprite, srcT, srcR, srcB, srcL, worldPos, bloomScale, flareScale, widthScale, colSrc, colMed, colAmb, colBlm, colGlw, colRaw, colFlr, lightMod, cheap, viewFlare, multiEmit, SubmatID, SubmatMaterial, SubmatParent)
 
 	if drawSrc then
 		startCam( camPos, camAng, 1 )
@@ -381,7 +381,7 @@ local setSurfaceMaterial = surface.SetMaterial
 local setSurfaceColor = surface.SetDrawColor
 local drawTexturedRect = surface.DrawTexturedRect
 
-function Photon.DrawScreenEffects( srcOnly, drawSrc, camPos, camAng, srcSprite, srcT, srcR, srcB, srcL, worldPos, bloomScale, flareScale, widthScale, colSrc, colMed, colAmb, colBlm, colGlw, colRaw, colFlr, lightMod, cheap, viewFlare, multiEmit, SubmatID, SubmatMaterial, parent, debug_mode )
+function Photon.DrawScreenEffects( debug_mode, srcOnly, drawSrc, camPos, camAng, srcSprite, srcT, srcR, srcB, srcL, worldPos, bloomScale, flareScale, widthScale, colSrc, colMed, colAmb, colBlm, colGlw, colRaw, colFlr, lightMod, cheap, viewFlare, multiEmit, SubmatID, SubmatMaterial, parent )
 	if false then return end
 	if viewFlare and colFlr and viewFlare > 0 and not cheap then
 		local width = drawW
@@ -521,8 +521,7 @@ function Photon:RenderQueue( effects )
 		for i=1, count do
 			if photonRenderTable[i] != nil then
 				local data = photonRenderTable[i]
-				renderFunction( data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10], data[11], data[12], data[13], data[14], data[15], data[16],
-								data[17], data[18], data[19], data[20], data[21], data[22], data[23], data[24], data[25], data[26], data[27], debug_mode )
+				renderFunction(debug_mode, unpack(data))
 			end
 		end
 	end
